@@ -20,3 +20,5 @@ build/
 .idea
 *.sublime-workspace
 .vscode/*
+
+.env
