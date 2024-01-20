@@ -40,7 +40,6 @@ forBlock["openai_query"] = function (block, generator) {
   const openAIQueryFunction = generator.provideFunction_(
     "openAIQueryFunction",
     `async function ${generator.FUNCTION_NAME_PLACEHOLDER_}(apiKey, query) {
-  // Send a query to the OpenAI API and handle the response
   const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
     method: 'POST',
     headers: {
@@ -55,6 +54,19 @@ forBlock["openai_query"] = function (block, generator) {
 }`
   );
 
-  const code = `await ${openAIQueryFunction}(${apiKey}, ${query});\n`;
+  // Return a promise that resolves with the result of the OpenAI API call
+  const code = `${openAIQueryFunction}(${apiKey}, ${query})`;
+  return [code, Order.NONE];
+};
+
+forBlock["print"] = function (block, generator) {
+  const text = generator.valueToCode(block, "TEXT", Order.NONE) || "''";
+
+  // Handle promise input
+  const code = `(async () => {
+    const output = await ${text};
+    console.log(output);
+  })();\n`;
+
   return code;
 };

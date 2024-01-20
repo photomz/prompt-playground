@@ -19,24 +19,28 @@ Object.assign(javascriptGenerator.forBlock, forBlock);
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById("generatedCode").firstChild;
 const outputDiv = document.getElementById("output");
+const outputPane = document.querySelector("#outputPane");
 const blocklyDiv = document.getElementById("blocklyDiv");
 const ws = Blockly.inject(blocklyDiv, { toolbox });
 
 // This function resets the code and output divs, shows the
-// generated code from the workspace, and evals the code.
-// In a real application, you probably shouldn't use `eval`.
-const runCode = () => {
+// generated code from the workspace, but doesn't eval the code.
+const updatecode = () => {
   const code = javascriptGenerator.workspaceToCode(ws);
   codeDiv.innerText = code;
 
   outputDiv.innerHTML = "";
-
-  eval(code);
 };
 
 // Load the initial state from storage and run the code.
 load(ws);
-runCode();
+
+// Create a run button in blocklyDiv to run code
+const runButton = document.createElement("button");
+runButton.innerText = "Run";
+// Run code here
+runButton.onclick = () => eval(codeDiv.innerText);
+outputPane.insertBefore(runButton, outputPane.firstChild);
 
 // Every time the workspace changes state, save the changes to storage.
 ws.addChangeListener((e) => {
@@ -58,5 +62,5 @@ ws.addChangeListener((e) => {
   ) {
     return;
   }
-  runCode();
+  updatecode();
 });

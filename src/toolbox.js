@@ -539,6 +539,20 @@ export const toolbox = {
             },
           },
         },
+        {
+          kind: "block",
+          type: "print",
+          inputs: {
+            TEXT: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "abc",
+                },
+              },
+            },
+          },
+        },
       ],
     },
     {

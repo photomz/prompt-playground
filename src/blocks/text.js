@@ -47,11 +47,27 @@ const openAIQuery = {
       check: "String",
     },
   ],
-  previousStatement: null,
-  nextStatement: null,
+  output: "String", // This line indicates that the block returns a string
   colour: 230,
   tooltip: "Sends a query to the OpenAI API and returns the response.",
   helpUrl: "https://openai.com/api/",
+};
+
+const printBlock = {
+  type: "print",
+  message0: "Print %1",
+  args0: [
+    {
+      type: "input_value",
+      name: "TEXT",
+      check: "String",
+    },
+  ],
+  previousStatement: null,
+  nextStatement: null,
+  colour: 160,
+  tooltip: "Prints the input to the console.",
+  helpUrl: "",
 };
 
 // Create the block definitions for the JSON-only blocks.
@@ -60,4 +76,5 @@ const openAIQuery = {
 export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   addText,
   openAIQuery,
+  printBlock,
 ]);
