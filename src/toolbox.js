@@ -553,6 +553,24 @@ export const toolbox = {
             },
           },
         },
+        {
+          kind: "block",
+          type: "async_block",
+          inputs: {
+            DO: {
+              block: {
+                type: "text_print", // Example of a default block inside the async block
+                fields: {
+                  TEXT: "Hello, async world!",
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "await",
+        },
       ],
     },
     {

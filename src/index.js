@@ -43,8 +43,18 @@ load(ws);
 const runButton = document.createElement("button");
 runButton.innerText = "Run";
 // Run code here
-runButton.onclick = () => eval(codeDiv.innerText);
+runButton.onclick = () => {
+  outputDiv.innerHTML = eval(codeDiv.innerText);
+};
 outputPane.insertBefore(runButton, outputPane.firstChild);
+
+// Copy to clipboard
+const copyButton = document.createElement("button");
+copyButton.innerText = "Copy";
+copyButton.onclick = () => {
+  navigator.clipboard.writeText(codeDiv.innerText);
+};
+outputPane.insertBefore(copyButton, outputPane.firstChild);
 
 // Every time the workspace changes state, save the changes to storage.
 ws.addChangeListener((e) => {

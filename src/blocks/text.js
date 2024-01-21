@@ -34,16 +34,16 @@ const addText = {
 
 const openAIQuery = {
   type: "openai_query",
-  message0: "Query OpenAI with API key %1 and input %2",
+  message0: "Ask OpenAI %1 with API key %2",
   args0: [
     {
       type: "input_value",
-      name: "API_KEY",
+      name: "QUERY",
       check: "String",
     },
     {
       type: "input_value",
-      name: "QUERY",
+      name: "API_KEY",
       check: "String",
     },
   ],
@@ -70,6 +70,40 @@ const printBlock = {
   helpUrl: "",
 };
 
+const asyncBlock = {
+  type: "async_block",
+  message0: "async %1",
+  args0: [
+    {
+      type: "input_statement",
+      name: "DO",
+    },
+  ],
+  previousStatement: null,
+  nextStatement: null,
+  colour: 230,
+  tooltip: "Executes contained blocks asynchronously.",
+  helpUrl: "",
+};
+
+const awaitBlock = {
+  type: "await",
+  message0: "await %1",
+  args0: [
+    {
+      type: "input_value",
+      name: "TEXT",
+      check: "String",
+    },
+  ],
+  previousStatement: null,
+  nextStatement: null,
+  colour: 230,
+  output: "String", // This line indicates that the block returns a string
+  tooltip: "awaits a value",
+  helpUrl: "",
+};
+
 // Create the block definitions for the JSON-only blocks.
 // This does not register their definitions with Blockly.
 // This file has no side effects!
@@ -77,4 +111,6 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   addText,
   openAIQuery,
   printBlock,
+  asyncBlock,
+  awaitBlock,
 ]);

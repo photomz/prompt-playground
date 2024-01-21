@@ -27,6 +27,7 @@
     "@pinecone-database/pinecone": "^2.0.1",
     "blockly": "^10.0.0",
     "dotenv": "^16.3.2",
+    "highlight.js": "^11.9.0",
     "openai": "^4.24.7"
   }
 }

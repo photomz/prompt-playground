@@ -63,10 +63,30 @@ forBlock["print"] = function (block, generator) {
   const text = generator.valueToCode(block, "TEXT", Order.NONE) || "''";
 
   // Handle promise input
-  const code = `(async () => {
-    const output = await ${text};
-    console.log(output);
-  })();\n`;
+  const code = `console.log(${text});\n`;
 
   return code;
+};
+
+forBlock["async_block"] = function (block, generator) {
+  const statementsDo = generator.statementToCode(block, "DO");
+
+  // Generate the anonymous async function.
+  const code = `(async () => {
+    try {
+      ${statementsDo}
+    } catch (error) {
+      console.error('Error in async operation:', error);
+      throw error;
+    }
+  })();\n`;
+  return code;
+};
+
+forBlock["await"] = function (block, generator) {
+  const expression = generator.valueToCode(block, "TEXT", Order.NONE) || "''";
+
+  // Generate the anonymous async function.
+  const code = `await ${expression}`;
+  return [code, Order.NONE];
 };
