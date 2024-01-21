@@ -10,6 +10,10 @@ import { forBlock } from "./generators/javascript";
 import { javascriptGenerator } from "blockly/javascript";
 import { save, load } from "./serialization";
 import { toolbox } from "./toolbox";
+import OpenAI from "openai";
+// Globval scope so blocks can access without importing
+window.OpenAI = OpenAI;
+
 import "./index.css";
 
 // Register the blocks and generator with Blockly

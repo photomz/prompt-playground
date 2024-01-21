@@ -39,18 +39,18 @@ forBlock["openai_query"] = function (block, generator) {
 
   const openAIQueryFunction = generator.provideFunction_(
     "openAIQueryFunction",
-    `async function ${generator.FUNCTION_NAME_PLACEHOLDER_}(apiKey, query) {
-  const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + apiKey
-    },
-    body: JSON.stringify({prompt: query, max_tokens: 150})
+    `
+async function ${generator.FUNCTION_NAME_PLACEHOLDER_}(apiKey, query) {
+  const openai = new window.OpenAI({
+    apiKey,
+    dangerouslyAllowBrowser: true 
   });
-
-  const data = await response.json();
-  return data.choices[0].text;
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: 'user', content: query }],
+    model: 'gpt-3.5-turbo',
+  });
+  console.log(chatCompletion);
+  return chatCompletion.choices[0].message.content;
 }`
   );
 
