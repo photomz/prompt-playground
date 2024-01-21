@@ -11,8 +11,16 @@ import { javascriptGenerator } from "blockly/javascript";
 import { save, load } from "./serialization";
 import { toolbox } from "./toolbox";
 import OpenAI from "openai";
+const { Pinecone } = require('@pinecone-database/pinecone');
 // Globval scope so blocks can access without importing
 window.OpenAI = OpenAI;
+window.Pinecone = Pinecone;
+
+// console.log(window.Pinecone)
+
+// const client = window.Pinecone({apiKey: '3b72b014-541f-432a-8a7d-bfd48e24fbb2'}).index('sample-movies')
+// console.log(client)
+
 
 import "./index.css";
 

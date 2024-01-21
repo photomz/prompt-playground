@@ -22,6 +22,21 @@ export const toolbox = {
       contents: [
         {
           kind: "block",
+          type: "async",
+          inputs: {
+            DO: {
+              block: {
+                type: "text_print", // Placeholder
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "await",
+        },
+        {
+          kind: "block",
           type: "controls_if",
         },
         {
@@ -519,28 +534,6 @@ export const toolbox = {
         },
         {
           kind: "block",
-          type: "openai_query",
-          inputs: {
-            API_KEY: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "Your-OpenAI-API-Key",
-                },
-              },
-            },
-            QUERY: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "Your query here",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
           type: "print",
           inputs: {
             TEXT: {
@@ -552,24 +545,6 @@ export const toolbox = {
               },
             },
           },
-        },
-        {
-          kind: "block",
-          type: "async_block",
-          inputs: {
-            DO: {
-              block: {
-                type: "text_print", // Example of a default block inside the async block
-                fields: {
-                  TEXT: "Hello, async world!",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "await",
         },
       ],
     },
@@ -677,81 +652,6 @@ export const toolbox = {
       ],
     },
     {
-      kind: "category",
-      name: "Color",
-      categorystyle: "colour_category",
-      contents: [
-        {
-          kind: "block",
-          type: "colour_picker",
-        },
-        {
-          kind: "block",
-          type: "colour_random",
-        },
-        {
-          kind: "block",
-          type: "colour_rgb",
-          inputs: {
-            RED: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 100,
-                },
-              },
-            },
-            GREEN: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 50,
-                },
-              },
-            },
-            BLUE: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 0,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "colour_blend",
-          inputs: {
-            COLOUR1: {
-              shadow: {
-                type: "colour_picker",
-                fields: {
-                  COLOUR: "#ff0000",
-                },
-              },
-            },
-            COLOUR2: {
-              shadow: {
-                type: "colour_picker",
-                fields: {
-                  COLOUR: "#3333ff",
-                },
-              },
-            },
-            RATIO: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 0.5,
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-    {
       kind: "sep",
     },
     {
@@ -766,5 +666,144 @@ export const toolbox = {
       categorystyle: "procedure_category",
       custom: "PROCEDURE",
     },
+    {
+      kind: "sep",
+    },
+
+    {
+      kind: "category",
+      name: "Prompt",
+      contents: [
+        {
+          kind: "block",
+          type: "openai_query",
+          inputs: {
+            API_KEY: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Your-OpenAI-API-Key",
+                },
+              },
+            },
+            QUERY: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Your query here",
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "openai_embed",
+            inputs: {
+              API_KEY: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Your-OpenAI-API-Key",
+                },
+              },
+            },
+            TEXT: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Who won the Iowa caucus?",
+                },
+              },
+            },
+            },
+        },
+        // 'role' block default text 'world-class professor
+        {
+          kind: "block",
+          type: "role",
+          // default string textbox
+          inputs: {
+            TEXT: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "🧑🏻‍🏫 world-class AI professor",
+                },
+              },
+            },
+          },
+        },
+        // 'rule' block takes a list of text inputs and outputs "You will: \n-{text1}\n-{text2}\n-{text3} ..."
+        {
+          kind: "block",
+          type: "rule",
+          inputs: {
+            TEXT: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "- be engaging",
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
+     {
+      kind: "category",
+      name: "VectorDB",
+      contents: [
+        {
+          kind: "block",
+          type: "setup_pinecone", // Add this block
+           inputs: {
+            API_KEY: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Your-Pinecone-API-Key",
+                },
+              },
+            },
+            INDEX_NAME: {
+              shadow: {
+                type: "text",
+                fields: {
+                  TEXT: "Your query here",
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "block",
+          type: "query_pinecone", // Add this block
+        },
+      ],
+    },
   ],
 };
+var prompt2, item;
+
+async function openAIQueryFunction(apiKey, query) {
+  const openai = new window.OpenAI({
+    apiKey,
+    dangerouslyAllowBrowser: true,
+  });
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: query }],
+    model: "gpt-3.5-turbo",
+  });
+  return chatCompletion.choices[0].message.content;
+}
+
+function addText(text, color) {
+  // Add text to the output area.
+  const outputDiv = document.getElementById("output");
+  const textEl = document.createElement("p");
+  textEl.innerText = text;
+  textEl.style.color = color;
+  outputDiv.appendChild(textEl);
+}
